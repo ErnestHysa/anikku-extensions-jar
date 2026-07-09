@@ -33,6 +33,39 @@
     "sources": []
   },
   {
+    "name": "AnimePahe",
+    "pkg": "eu.kanade.tachiyomi.animeextension.en.animepahe",
+    "apk": "eu.kanade.tachiyomi.animeextension.en.animepahe.jar",
+    "lang": "en",
+    "code": 141,
+    "version": "14.1",
+    "nsfw": 0,
+    "torrent": 0,
+    "sources": []
+  },
+  {
+    "name": "AnimeSogo",
+    "pkg": "eu.kanade.tachiyomi.animeextension.en.animesogo",
+    "apk": "eu.kanade.tachiyomi.animeextension.en.animesogo.jar",
+    "lang": "en",
+    "code": 141,
+    "version": "14.1",
+    "nsfw": 0,
+    "torrent": 0,
+    "sources": []
+  },
+  {
+    "name": "AniNeko",
+    "pkg": "eu.kanade.tachiyomi.animeextension.en.anineko",
+    "apk": "eu.kanade.tachiyomi.animeextension.en.anineko.jar",
+    "lang": "en",
+    "code": 141,
+    "version": "14.1",
+    "nsfw": 0,
+    "torrent": 0,
+    "sources": []
+  },
+  {
     "name": "ReAnime",
     "pkg": "eu.kanade.tachiyomi.animeextension.es.reanime",
     "apk": "eu.kanade.tachiyomi.animeextension.es.reanime.jar",
