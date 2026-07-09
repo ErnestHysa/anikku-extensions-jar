@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anikku macOS Extensions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f5f7;
+    --surface: #ffffff;
+    --primary: #0071e3;
+    --primary-hover: #0077ed;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #86868b;
+    --border: #d2d2d7;
+    --radius: 12px;
+    --radius-lg: 18px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
+    --transition: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1d1d1f;
+      --surface: #2d2d2f;
+      --primary: #2997ff;
+      --primary-hover: #47a3ff;
+      --text: #f5f5f7;
+      --text-secondary: #a1a1a6;
+      --text-tertiary: #6e6e73;
+      --border: #424245;
+      --shadow: 0 1px 3px rgba(0,0,0,0.2), 0 1px 2px rgba(0,0,0,0.3);
+      --shadow-lg: 0 4px 24px rgba(0,0,0,0.4);
+    }
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header / hero */
+  .hero {
+    padding: 80px 24px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse 600px 400px at 50% 80%, rgba(0,113,227,0.08), transparent);
+    pointer-events: none;
+  }
+  .hero-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 24px;
+    background: linear-gradient(135deg, var(--primary), #00b4d8);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,113,227,0.25);
+    transition: transform var(--transition);
+  }
+  .hero-icon:hover { transform: scale(1.05) translateY(-2px); }
+  .hero-icon svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+  }
+  .hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--text), var(--text-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  .hero-badge .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #30d158;
+    display: inline-block;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Stats bar */
+  .stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 0 24px 48px;
+    flex-wrap: wrap;
+  }
+  .stat-item { text-align: center; }
+  .stat-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-top: 2px;
+  }
+
+  /* Extensions section */
+  .section {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    width: 100%;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .section-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .filter-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .search-input {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.875rem;
+    font-family: inherit;
+    outline: none;
+    width: 200px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  .search-input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.15);
+  }
+  .search-input::placeholder { color: var(--text-tertiary); }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+  .filter-btn:hover { border-color: var(--primary); color: var(--text); }
+  .filter-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+  }
+
+  /* Extension grid */
+  .ext-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  .ext-card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 16px;
+    transition: all var(--transition);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+  .ext-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), #00b4d8);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .ext-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+  .ext-card:hover::before { opacity: 1; }
+
+  .ext-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .ext-name {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .ext-lang {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 2px 8px;
+    border-radius: 100px;
+    background: var(--bg);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .ext-meta {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+  .ext-meta-item {
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .ext-meta-item svg {
+    width: 12px;
+    height: 12px;
+    fill: var(--text-tertiary);
+  }
+  .ext-pkg {
+    font-size: 0.6875rem;
+    color: var(--text-tertiary);
+    margin-top: 8px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    word-break: break-all;
+    padding: 4px 8px;
+    background: var(--bg);
+    border-radius: 6px;
+  }
+  .ext-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  /* Loading & empty states */
+  .loading-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--text-tertiary);
+  }
+  .spinner {
+    width: 24px;
+    height: 24px;
+    border: 2.5px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    color: var(--text-tertiary);
+  }
+  .empty-state svg {
+    width: 48px;
+    height: 48px;
+    fill: var(--text-tertiary);
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: auto;
+    padding: 32px 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  .footer p {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    font-size: 0.8125rem;
+    color: var(--primary);
+    text-decoration: none;
+    transition: opacity var(--transition);
+  }
+  .footer-links a:hover { opacity: 0.8; text-decoration: underline; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .hero { padding: 48px 16px 40px; }
+    .hero h1 { font-size: 1.75rem; }
+    .stats { gap: 24px; }
+    .ext-grid { grid-template-columns: 1fr; }
+    .section-header { flex-direction: column; align-items: stretch; }
+    .search-input { width: 100%; }
+    .filter-group { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-icon">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+    </svg>
+  </div>
+  <h1>Anikku Extensions</h1>
+  <p>Pre-built JVM extensions for the Anikku macOS anime player. Browse, install, and watch — no Android SDK required.</p>
+  <div class="hero-badge">
+    <span class="dot"></span>
+    <span id="extCount">Loading...</span>
+  </div>
+</div>
+
+<!-- Stats -->
+<div class="stats" id="stats">
+  <div class="stat-item">
+    <span class="stat-number" id="statTotal">—</span>
+    <span class="stat-label">Extensions</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" id="statSources">—</span>
+    <span class="stat-label">Sources</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-number" id="statLanguages">—</span>
+    <span class="stat-label">Languages</span>
+  </div>
+</div>
+
+<!-- Extensions list -->
+<div class="section">
+  <div class="section-header">
+    <h2>Available Extensions</h2>
+    <div class="filter-group">
+      <input class="search-input" type="text" id="searchInput" placeholder="Filter by name or package..." oninput="filterExtensions()">
+      <button class="filter-btn" id="filterAll" onclick="setFilter('all')">All</button>
+      <button class="filter-btn" id="filterEn" onclick="setFilter('en')">English</button>
+      <button class="filter-btn" id="filterEs" onclick="setFilter('es')">Español</button>
+      <button class="filter-btn" id="filterAllLang" onclick="setFilter('all')">Multilingual</button>
+    </div>
+  </div>
+
+  <div id="loadingState" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading extensions...</p>
+  </div>
+
+  <div id="emptyState" class="empty-state" style="display:none">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/></svg>
+    <p>No extensions match your filter.</p>
+  </div>
+
+  <div id="extGrid" class="ext-grid"></div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <p>Anikku macOS — A native anime watching experience for macOS.</p>
+  <div class="footer-links">
+    <a href="https://github.com/komikku-app/anikku">GitHub</a>
+    <a href="https://github.com/ErnestHysa/anikku-extensions-jar">Extension Repo</a>
+    <a href="https://raw.githubusercontent.com/ErnestHysa/anikku-extensions-jar/main/index.min.json">Index JSON</a>
+  </div>
+</div>
+
+<script>
+let extensions = [];
+let currentFilter = 'all';
+
+async function loadExtensions() {
+  const loading = document.getElementById('loadingState');
+  const grid = document.getElementById('extGrid');
+  const empty = document.getElementById('emptyState');
+
+  try {
+    const res = await fetch('index.min.json');
+    extensions = await res.json();
+    loading.style.display = 'none';
+    updateStats();
+    renderExtensions();
+  } catch (err) {
+    loading.innerHTML = '<p style="color:var(--text-tertiary)">⚠️ Failed to load extensions. Ensure the index file is accessible.</p>';
+    console.error('Failed to load extensions:', err);
+  }
+}
+
+function updateStats() {
+  const total = extensions.length;
+  const sourceCount = extensions.reduce((sum, e) => sum + (e.sources ? e.sources.length : 0), 0);
+  const langs = new Set(extensions.map(e => e.lang || 'en').filter(Boolean));
+
+  document.getElementById('statTotal').textContent = total;
+  document.getElementById('statSources').textContent = sourceCount;
+  document.getElementById('statLanguages').textContent = langs.size;
+  document.getElementById('extCount').textContent = `${total} extension${total !== 1 ? 's' : ''}`;
+}
+
+function renderExtensions() {
+  const grid = document.getElementById('extGrid');
+  const empty = document.getElementById('emptyState');
+  const searchVal = document.getElementById('searchInput').value.toLowerCase().trim();
+
+  let filtered = extensions;
+
+  // Apply language filter
+  if (currentFilter !== 'all') {
+    filtered = filtered.filter(e => (e.lang || 'en') === currentFilter);
+  }
+
+  // Apply search filter
+  if (searchVal) {
+    filtered = filtered.filter(e =>
+      (e.name || '').toLowerCase().includes(searchVal) ||
+      (e.pkg || e.pkgName || '').toLowerCase().includes(searchVal)
+    );
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  grid.innerHTML = filtered.map(ext => {
+    const pkgName = ext.pkg || ext.pkgName || '';
+    const lang = ext.lang || 'en';
+    const version = ext.version || ext.versionName || '1.0.0';
+    const name = ext.name || pkgName.split('.').pop();
+
+    return `
+      <div class="ext-card">
+        <div class="ext-card-header">
+          <div class="ext-name">${name.replace(/^Aniyomi:\s*/i, '')}</div>
+          <span class="ext-lang">${lang}</span>
+        </div>
+        <div class="ext-meta">
+          <span class="ext-meta-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10 10-4.49 10-10S17.51 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3-13h-2v7l5.25 3.15.75-1.23-4-2.37V7z"/></svg>
+            v${version}
+          </span>
+          <span class="ext-meta-item">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            ${ext.code || 0}
+          </span>
+          ${ext.sources && ext.sources.length > 0 ? `
+            <span class="ext-meta-item">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 6h4v12H4V6zm16 12H10V6h10v12z"/></svg>
+              ${ext.sources.length} source${ext.sources.length !== 1 ? 's' : ''}
+            </span>
+          ` : ''}
+        </div>
+        <div class="ext-pkg">${pkgName}</div>
+        ${ext.nsfw ? '<div class="ext-badge">⚠️ NSFW</div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function filterExtensions() {
+  renderExtensions();
+}
+
+function setFilter(lang) {
+  currentFilter = lang;
+  document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+  const btn = document.getElementById(lang === 'all' ? 'filterAll' : (lang === 'en' ? 'filterEn' : lang === 'es' ? 'filterEs' : 'filterAllLang'));
+  if (btn) btn.classList.add('active');
+  renderExtensions();
+}
+
+// Load on page load
+document.addEventListener('DOMContentLoaded', () => {
+  setFilter('all');
+  loadExtensions();
+});
+</script>
+
+</body>
+</html>
